@@ -7,16 +7,16 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/dimfeld/httptreemux/v5"
+	"github.com/mromero1591/service/foundation/web"
 )
 
 // API constructs an http.Handler with all application routes defined.
-func API(build string, shutdown chan os.Signal, log *log.Logger) *httptreemux.ContextMux {
-	treeMux := httptreemux.NewContextMux()
+func API(build string, shutdown chan os.Signal, log *log.Logger) *web.App {
+	app := web.NewApp()
 
 	check := check{
 		log: log,
 	}
-	treeMux.Handle(http.MethodGet, "/test", check.readiness)
-	return treeMux
+	app.Handle(http.MethodGet, "/test", check.readiness)
+	return app
 }
