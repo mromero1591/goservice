@@ -17,6 +17,6 @@ func API(build string, shutdown chan os.Signal, log *log.Logger) *web.App {
 	check := check{
 		log: log,
 	}
-	app.Handle(http.MethodGet, "/test", check.readiness)
+	app.Handle(http.MethodGet, "/readiness", check.readiness)
 	return app
 }
