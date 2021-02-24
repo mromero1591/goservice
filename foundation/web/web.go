@@ -44,6 +44,7 @@ func NewApp(shutdown chan os.Signal, mw ...Middleware) *App {
 	app := App{
 		ContextMux: httptreemux.NewContextMux(),
 		shutdown:   shutdown,
+		mw:         mw,
 	}
 
 	return &app
@@ -51,10 +52,11 @@ func NewApp(shutdown chan os.Signal, mw ...Middleware) *App {
 
 //Handle ...
 func (a *App) Handle(method string, path string, handler Handler, mw ...Middleware) {
-	//First warp handler specific middleware (auth)
+	// First wrap handler specific middleware around this handler.
+
 	handler = wrapMiddleware(mw, handler)
 
-	//Add the applications general middlware to the handler
+	// Add the application's general middleware to the handler chain.
 	handler = wrapMiddleware(a.mw, handler)
 
 	h := func(w http.ResponseWriter, r *http.Request) {

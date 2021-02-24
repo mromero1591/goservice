@@ -17,7 +17,7 @@ type check struct {
 func (c check) readiness(ctx context.Context, w http.ResponseWriter, r *http.Request) error {
 
 	if n := rand.Intn(100); n%2 == 0 {
-		return errors.New("untrusted error")
+		return web.NewRequestError(errors.New("trusted error "), http.StatusBadRequest)
 	}
 
 	status := struct {
@@ -25,7 +25,6 @@ func (c check) readiness(ctx context.Context, w http.ResponseWriter, r *http.Req
 	}{
 		Status: "ok",
 	}
-	log.Println(r, status)
 
 	return web.Respond(ctx, w, status, http.StatusOK)
 
